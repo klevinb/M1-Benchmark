@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+  <!--
+        QUIZ GAME!
+
+        RULES:
+        / The player must guess correctly a certain amount of questions
+        / Each correct answer gives him one point
+        / Answers could be â€œmultipleâ€ or â€œtrue/falseâ€
+        / At the end of the game, the user must know his total score
+
+        QUESTIONS:
+        / You can get them from this URL ( http://bit.ly/strive_QUIZZ ) or you can write your own
+        / Could be multiple of boolean (true / false)
+        / [EXTRA] Show if the answer was wrong or correct after clicking
+        / [EXTRA] Present them â€œone a timeâ€
+
+        HINTS:
+        / Keep a global variable â€œscoreâ€ for the score
+        / Keep a variable â€œquestionNumberâ€ for the â€œquestionâ€ the user is answering
+        / When â€œquestionNumberâ€ is bigger then the available questions, present the score
+        / Start working with the question saved in a variable, and then include AJAX etc
+        / Start with the easier version and THEN implement the â€œEXTRAsâ€
+        / Please debug everything / try it on the console to be sure of what to expect from your code
+
+        EXTRA:
+        / Show if the answer was wrong or correct after clicking
+        / Present questions one a time
+        / Let the user select difficulty and number of questions (you can get q/a from https://opentdb.com/api.php?amount=10&category=18&difficulty=easy modifying amount and difficulty)
+
+    -->
+
+  <head>
+    <title>Quiz</title>
+    <style>
+      #container{
+        margin-top: 50px;
+      }
+      body{
+        background-color: peachpuff;
+      }
+      #scoreInput{
+        width: 30px;
+        font-size: 30px;
+        text-align: center;
+        margin-left: 150px;
+        margin-right: 150px;
+        border-radius: 5px;
+        background-color: transparent;
+        color: red;
+      }
+      #score{
+        display: flex;
+        flex-direction: column;
+        float: right;
+        text-align: center;
+        margin-right: 150px;
+        max-width: 300px;
+      }
+      .h1 {
+        font-size: 20px;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      #score input{
+        margin-left: 130px;
+        border-radius: 5px;
+        box-shadow: 3px 3px gray;
+      }
+      #questionBox{
+        float: left;
+        margin-left: 100px;
+        width: 600px;
+        height: 400px;
+        border: 5px solid black;
+        border-radius: 5px;
+        box-shadow: 10px 10px gray;
+      }
+      #buttonId{
+        margin-left: 250px;
+        padding: 10px;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        border-radius: 10px;
+        color:black;
+        margin-top: 20px;
+        background-color: grey;
+      }
+      #questionBox h1{
+        text-align: center;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      }
+      #questionButton {
+        width: 100%;
+        margin-top: -10px;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+        background-color: cadetblue;
+      }
+      #addQuestion h1 {
+        max-height: 500px;
+        font-size: 15px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      }
+      #addQuestion{
+        margin-top: 40px;
+      }
+      .answers {
+        font-size: 15px;
+        margin-left: 250px;
+
+      }
+      .answersText {
+        text-align: center;
+        display: inline;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div id="questionBox">
+        <h1>QUESTIONS</h1>
+        <hr>
+        <input id="questionButton" type="button" value="New Question To Test Yourself" onclick="addQuestion()"/>
+        <div id="addQuestion"></div>
+      </div>
+      
+      <div id="score">
+        <p class="h1">Score</p>
+        <input id="scoreInput" type="text" value="0" disabled/>
+        <p class="h1">Correct Answers</p>
+      </div>
+    </div>
+    <script>
+      var questions = [
+        {
+          category: 'Science: Computers',
+          type: 'multiple',
+          difficulty: 'easy',
+          question: 'What does CPU stand for?',
+          correct_answer: 'Central Processing Unit',
+          incorrect_answers: ['Central Process Unit', 'Computer Personal Unit', 'Central Processor Unit'],
+          answers: ['Central Process Unit', 'Computer Personal Unit','Central Processing Unit','Central Processor Unit']
+        },
+        {
+          category: 'Science: Computers',
+          type: 'multiple',
+          difficulty: 'easy',
+          question:
+            "In the programming language Java, which of these keywords would you put on a variable to make sure it doesn't get modified?",
+          correct_answer: 'Final',
+          incorrect_answers: ['Static', 'Private', 'Public'],
+          answers: ['Static','Final', 'Private', 'Public']
+        },
+        {
+          category: 'Science: Computers',
+          type: 'boolean',
+          difficulty: 'easy',
+          question: 'The logo for Snapchat is a Bell.',
+          correct_answer: 'False',
+          incorrect_answers: ['True'],
+          answers: ['True','False']
+        },
+        {
+          category: 'Science: Computers',
+          type: 'boolean',
+          difficulty: 'easy',
+          question: 'Pointers were not used in the original C programming language; they were added later on in C++.',
+          correct_answer: 'False',
+          incorrect_answers: ['True'],
+          answers: ['True','False']
+        },
+        {
+          category: 'Science: Computers',
+          type: 'multiple',
+          difficulty: 'easy',
+          question: 'What is the most preferred image format used for logos in the Wikimedia database?',
+          correct_answer: '.svg',
+          incorrect_answers: ['.png', '.jpeg', '.gif'],
+          answers: ['.png', '.jpeg', '.gif','.svg']
+        },
+        {
+          category: 'Science: Computers',
+          type: 'multiple',
+          difficulty: 'easy',
+          question: 'In web design, what does CSS stand for?',
+          correct_answer: 'Cascading Style Sheet',
+          incorrect_answers: ['Counter Strike: Source', 'Corrective Style Sheet', 'Computer Style Sheet'],
+          answers: ['Counter Strike: Source','Cascading Style Sheet', 'Corrective Style Sheet', 'Computer Style Sheet']
+        },
+        {
+          category: 'Science: Computers',
+          type: 'multiple',
+          difficulty: 'easy',
+          question: 'What is the code name for the mobile operating system Android 7.0?',
+          correct_answer: 'Nougat',
+          incorrect_answers: ['Ice Cream Sandwich', 'Jelly Bean', 'Marshmallow'],
+          answers: ['Ice Cream Sandwich', 'Jelly Bean','Nougat', 'Marshmallow']
+        },
+        {
+          category: 'Science: Computers',
+          type: 'multiple',
+          difficulty: 'easy',
+          question: 'On Twitter, what is the character limit for a Tweet?',
+          correct_answer: '140',
+          incorrect_answers: ['120', '160', '100'],
+          answers: ['140','120', '160', '100']
+        },
+        {
+          category: 'Science: Computers',
+          type: 'boolean',
+          difficulty: 'easy',
+          question: 'Linux was first created as an alternative to Windows XP.',
+          correct_answer: 'False',
+          incorrect_answers: ['True'],
+          answers: ['True','False']
+        },
+        {
+          category: 'Science: Computers',
+          type: 'multiple',
+          difficulty: 'easy',
+          question: 'Which programming language shares its name with an island in Indonesia?',
+          correct_answer: 'Java',
+          incorrect_answers: ['Python', 'C', 'Jakarta'],
+          answers: ['Python','Java', 'C', 'Jakarta']
+        },
+      ]
+      var nrOfQuestions = 0;
+      window.onload = function () {
+        // alert("Try this wonderful game! To start the game just generate new questions.")
+        //IF YOU ARE DISPLAYING ALL THE QUESTIONS TOGETHER:
+        //HINT: for each question, create a container with the "question"
+        //create a radio button https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio with, as option the both the correct answer and the incorrect answers
+        //when EVERY question has an answer (google for how to get a value from a radio button with JS)
+        //IF YOU ARE DISPLAYING ONE QUESTION AT A TIME
+        //Display first question with a title + radio button
+        //when the user select the answer, pick the next question and remove this from the page after added in a varible the users' choice.
+      }
+
+      //HOW TO calculate the result
+      //You can do it in 2 ways:
+      //If you are presenting all questions together, just take all the radio buttons and check if the selected answer === correct_answer
+      //If you are presenting one question at a time, just add one point or not to the user score if the selected answer === correct_answer
+    function addQuestion(){
+      clear()
+      
+      let reference = document.getElementById("addQuestion")
+      let check = document.querySelectorAll("#addQuestion h1")
+
+      if(check.length === 0){
+      let length = questions.length;
+      if(nrOfQuestions>length || nrOfQuestions === length){
+        alert("We dont have any more questions!")
+      }else{
+        let h1=document.createElement("h1")
+        h1.innerText=questions[nrOfQuestions].question
+        var ansersReference = questions[nrOfQuestions].answers
+        reference.appendChild(h1)
+        for(let i=0; i<ansersReference.length; i++){
+          let answers = document.createElement("input")
+          let text = document.createElement("p")
+          let brk =document.createElement("br")
+          
+          
+          text.classList="answersText"
+          answers.classList="answers"
+          text.innerText = questions[nrOfQuestions].answers[i]
+          answers.setAttribute("type", "radio");
+          answers.setAttribute("name","answers")
+          answers.setAttribute("value",questions[nrOfQuestions].answers[i])
+          reference.appendChild(answers)
+          reference.appendChild(text)
+          reference.appendChild(brk)
+          
+        }
+          let button = document.createElement("input")
+          button.id="buttonId"
+          button.setAttribute("value","Check Your Answer")
+          button.setAttribute("type","button")
+          button.addEventListener("click",checkAnswer)
+          reference.appendChild(button)
+      
+        
+      }
+      }
+    }
+    function checkAnswer(){
+      let reference = document.querySelectorAll(".answers")
+      let score = document.getElementById("scoreInput")
+
+      for(let i=0; i<reference.length; i++){
+        if(reference[i].checked == true){
+          if(reference[i].value == questions[nrOfQuestions].correct_answer){
+            score.value = parseInt(score.value) + 1
+          }else{
+            let answer = document.getElementById("score")
+            let pAnswer = document.createElement("p")
+            let pQuestion = document.createElement("p")
+            pQuestion.classList="questions"
+            pAnswer.classList="answer"
+            pQuestion.innerText = "Question : " +questions[nrOfQuestions].question
+            pAnswer.innerText = "Correct Answer : " + questions[nrOfQuestions].correct_answer
+            answer.appendChild(pQuestion)
+            answer.appendChild(pAnswer)
+          }
+          nrOfQuestions++
+          document.getElementById("buttonId").disabled= "true"
+        }
+      }
+      
+    }
+
+    function clear(){
+      let reference = document.getElementById("addQuestion")
+        reference.remove()
+        let div = document.createElement("div")
+        div.id="addQuestion"
+        let newReference = document.getElementById("questionBox")
+        newReference.appendChild(div)
+    }
+    </script>
+  </body>
+</html>
