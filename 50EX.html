@@ -160,163 +160,204 @@
     <script>
       window.onload = function(){
         console.log("Page loaded")
-      }
-      let x = "Jhon"
-      let y = "Doe"
-      console.log(x,"<>",y)
-
-      let object = {
-        name: "Klevin",
-        surname: "Bazaiti",
-        email: "klevin.bazaiti98@gmail.com"
-       }
-       delete object.email
-
-       let array = []
-       for(let i=0; i<10; i++){
-         array[i]="String"
-         console.log(array[i])
-       }
-
-       let arrayNr=[]
-
-       for(let i=0; i<100; i++){
-         arrayNr[i] = Math.round(Math.random() * 100)
-       }
-       console.log(arrayNr)
-
-       var max = -999
-       var min = 999
+        let reference = document.querySelectorAll("td")
+        for(let i=0; i<reference.length; i++){
+          reference[i].addEventListener("click", function(event){
+            event.target.style.backgroundColor = "red"
+            let cls = event.target.innerText
+            console.log(cls)
+          })
+          reference[i].addEventListener("mouseover",function(event){
+            event.target.style.border= "1px solid pink"
+          })
+          reference[i].addEventListener("mouseout",function(event){
+            event.target.style.border= "1px solid green"
+          })
+        }
         
-       for(let i=0; i<arrayNr.length; i++){
-         if(arrayNr[i]<min){
-           min = arrayNr[i]
-         }
-         if(arrayNr[i]>max){
-           max = arrayNr[i]
-         }
-       }
+      }
+      function sumOfTd(){
+        let reference = document.querySelectorAll("td")
+        let sum= 0
+        for(let i=0; i<reference.length; i++){
+          if(!isNaN(parseInt(reference[i].innerText))){
+            sum += parseInt(reference[i].innerText)
+          }
+        }
+        console.log(sum)
+      }
 
-       console.log("Min : ",min," Max : ",max)
+      function deleteFromTd(){
+        let reference = document.querySelectorAll("td")
+        let randomIndex = Math.floor(Math.random()*reference.length)
+        
+        reference[randomIndex].style.display = "none"
 
-       var matrix = []
 
-       for(let i=0; i<10; i++) {
-           matrix[i] = []
-           for(let j=0; j<10; j++) {
-               matrix[i][j] = Math.round(Math.random() * 100)
+      }
+       let x = "Jhon"
+       let y = "Doe"
+       console.log(x,"<>",y)
+
+       let object = {
+         name: "Klevin",
+         surname: "Bazaiti",
+         email: "klevin.bazaiti98@gmail.com"
+        }
+        delete object.email
+
+        let array = []
+        for(let i=0; i<10; i++){
+          array[i]="String"
+          console.log(array[i])
+        }
+
+        let arrayNr=[]
+
+        for(let i=0; i<100; i++){
+          arrayNr[i] = Math.round(Math.random() * 100)
+        }
+        console.log(arrayNr)
+
+        var max = -999
+        var min = 999
+        
+        for(let i=0; i<arrayNr.length; i++){
+          if(arrayNr[i]<min){
+            min = arrayNr[i]
+          }
+          if(arrayNr[i]>max){
+            max = arrayNr[i]
+          }
+        }
+
+        console.log("Min : ",min," Max : ",max)
+
+        var matrix = []
+
+        for(let i=0; i<10; i++) {
+            matrix[i] = []
+            for(let j=0; j<10; j++) {
+                matrix[i][j] = Math.round(Math.random() * 100)
+            }
+        }
+        console.log(matrix)
+
+        function lengthCheck(a,b){
+          if(a.length > b.length){
+            console.log(a)
+          }else{
+            console.log(b)
+          }
+        }
+
+        function sum(a){
+          let sum=0
+          for(let i=0; i<a.length; i++){
+            sum += parseInt(a[i])
+          }
+          return sum
+        }
+
+        function compareSum(a, b){
+          let aSum= sum(a)
+          let bSum= sum(b)
+
+          if(aSum > bSum){
+            console.log(a)
+          }else{
+            console.log(b)
+          }
+        }
+        let container = document.getElementById("container")
+        let td = document.querySelectorAll("td")
+
+        for(let i=0; i<td.length; i++){
+          console.log(td[i].innerText)
+        }
+
+        function changeTitle(a){
+          let title = document.querySelector("h1")
+          title.innerText=a
+        }
+        function addRow(){
+          let table = document.querySelector("table")
+          let row = document.createElement("tr")
+           for(let i=0; i<5; i++){
+             let td = document.createElement("td")
+             td.innerText="2"
+             row.appendChild(td)
            }
-       }
-       console.log(matrix)
+          table.appendChild(row)
+        }
 
-       function lengthCheck(a,b){
-         if(a.length > b.length){
-           console.log(a)
-         }else{
-           console.log(b)
-         }
-       }
+        function addClassName(){
+          let table = document.querySelectorAll("table tr")
+          for(let i=0; i<table.length; i++){
+            table[i].classList="test"
+          }
+        }
 
-       function sum(a){
-         let sum=0
-         for(let i=0; i<a.length; i++){
-           sum += parseInt(a[i])
-         }
-         return sum
-       }
+        function changeLinkBackgorundColor(){
+          let links = document.querySelectorAll("a")
+          for(let i=0; i<links.length; i++){
+            links[i].style.backgroundColor = "red"
+          }
+        }
+        function addItemToUl(a){
+          let ul = document.querySelector("ul")
+          let newItem = document.createElement("li")
+          newItem.innerText=a
+          ul.appendChild(newItem)
+        }
 
-       function compareSum(a, b){
-         let aSum= sum(a)
-         let bSum= sum(b)
+        function emptyAList(){
+          let ol = document.querySelectorAll("ol li")
+          for(let i=0; i<ol.length; i++){
+            ol[i].remove()
+          }
+        }
 
-         if(aSum > bSum){
-           console.log(a)
-         }else{
-           console.log(b)
-         }
-       }
-       let container = document.getElementById("container")
-       let td = document.querySelectorAll("td")
+        let links = document.querySelectorAll("a")       
+        for(let i=0; i<links.length; i++){
+          links[i].addEventListener("mouseover",function(){
+            alert(links[i].href)
+          })
+        }
 
-       for(let i=0; i<td.length; i++){
-         console.log(td[i].innerText)
-       }
+        function hideImages(){
+          let images = document.querySelectorAll("img")
+          for(let i=0; i<images.length; i++){
+            images[i].style.display="none"
+          }
+        }
 
-       function changeTitle(a){
-         let title = document.querySelector("h1")
-         title.innerText=a
-       }
-       function addRow(){
+        var show = true;
+        function hideTable(){
          let table = document.querySelector("table")
-         let row = document.createElement("tr")
+          if(show == true){
+           table.style.visibility="hidden"
+           show=false
+          }else{
+            table.style.visibility=""
+            show=true
+          }
+        }
 
-         table.appendChild(row)
-       }
-
-       function addClassName(){
-         let table = document.querySelectorAll("table tr")
-         for(let i=0; i<table.length; i++){
-           table[i].classList="test"
-         }
-       }
-
-       function changeLinkBackgorundColor(){
-         let links = document.querySelectorAll("a")
-         for(let i=0; i<links.length; i++){
-           links[i].style.backgroundColor = "red"
-         }
-       }
-       function addItemToUl(a){
-         let ul = document.querySelector("ul")
-         let newItem = document.createElement("li")
-         newItem.innerText=a
-         ul.appendChild(newItem)
-       }
-
-       function emptyAList(){
-         let ol = document.querySelectorAll("ol li")
-         for(let i=0; i<ol.length; i++){
-           ol[i].remove()
-         }
-       }
-
-       let links = document.querySelectorAll("a")       
-       for(let i=0; i<links.length; i++){
-         links[i].addEventListener("mouseover",function(){
-           alert(links[i].href)
-         })
-       }
-
-       function hideImages(){
-         let images = document.querySelectorAll("img")
-         for(let i=0; i<images.length; i++){
-           images[i].style.display="none"
-         }
-       }
-
-       var show = true;
-       function hideTable(){
-        let table = document.querySelector("table")
-         if(show == true){
-          table.style.visibility="hidden"
-          show=false
-         }else{
-           table.style.visibility=""
-           show=true
-         }
-       }
-
-       function titleRemover(){
-          let title = document.querySelector("title")
-          let newTitle = title.innerText
-          let newStr = newTitle.substring(0, newTitle.length - 1);
-          document.querySelector("title").innerText=newStr
-       }
+        function titleRemover(){
+           let title = document.querySelector("title")
+           let newTitle = title.innerText
+           let newStr = newTitle.substring(0, newTitle.length - 1);
+           document.querySelector("title").innerText=newStr
+        }
       
-       function removeTable(){
-        let table = document.querySelector("table")
-        table.style.display="none"
-       }
+        function removeTable(){
+         let table = document.querySelector("table")
+         table.style.display="none"
+        }
+       
+
+    
     </script>
   </body>
 </html>
